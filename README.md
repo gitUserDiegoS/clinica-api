@@ -17,13 +17,7 @@ cd clinica-api
 
 importar a Ide preferido
 
-Url base de api `http://localhost:3000`.
+Url base de api `http://localhost:8080`.
 
 ## Endpoints
 
-Here are some of the main endpoints of the API:
-
-- `GET /patients` - Retrieve a list of patients
-- `POST /patients` - Add a new patient
-- `GET /appointments` - Retrieve a list of appointments
-- `POST /appointments` - Schedule a new appointment
