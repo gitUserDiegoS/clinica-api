@@ -1,6 +1,6 @@
 # Clinica API
 
-Proyecto para gestionar citas medicas de pacientes dentro de una clinica, opreaciones soportadas (agendar, consultar, cancelar)
+Proyecto para gestionar citas médicas de pacientes dentro de una clínica. Operaciones soportadas: agendar, consultar, cancelar.
 
 ## Table of Contents
 
@@ -12,55 +12,53 @@ Proyecto para gestionar citas medicas de pacientes dentro de una clinica, opreac
 
 ## Installation
 
-    1. Ejecutar scripts de base de datos (Se comparten por correo).
+1. Ejecutar scripts de base de datos.
+    1.1. Ejecutar archivo `user-bd.sql` para crear usuario de base de datos.
+    1.2. Ejecutar archivo `esquema-clinica-bd.sql` para crear esquema y tablas.
+2. Clonar el repositorio git (ubicarse en rama master):
+    ```sh
+    git clone https://github.com/gitUserDiegoS/clinica-api.git
+    ```
 
-        1.1. Ejecutar archivo user-bd.sql para crear usuario de base de datos.  
-
-        1.2. Ejecutar archivo esquema-clinica-bd.sql para crear esquema y tablas.
-
-    2. Clonar el repositorio git (ubicarse en rama master); git clone https://github.com/gitUserDiegoS/clinica-api.git.
-
-    3. Importar a Ide de preferencia, descargar dependencias maven
-    
- 
- 
-Url base de api `http://localhost:8080`.
+Url base de API: `http://localhost:8080`.
 
 ## Endpoints
 
-1.Post - Registrar citas medicas
+### 1. POST - Registrar citas médicas
 
-http://localhost:8080/api/citasmedicas
+`http://localhost:8080/api/citasmedicas`
 
-Request:
+**Request:**
 
 ```json
 {
-    "cita":"Medicina General",
+    "cita": "Medicina General",
     "fecha": "2025-10-05T12:31:00",
     "estado": "Activa",
     "paciente": {        
-        "nombre":"Diego",
-        "apellido":"Sanchez Gomez"
+        "nombre": "Diego",
+        "apellido": "Sanchez Gomez"
     },
     "medico": {                
-        "nombre":"Sara",
-        "apellido":"Arbelaez"
+        "nombre": "Sara",
+        "apellido": "Arbelaez"
     }
 }
 ```
 
-Response http 201: 
+**Response (HTTP 201):**
+
 ```json
-Cita registrada con exito
+{
+    "message": "Cita registrada con éxito"
+}
 ```
 
+### 2. POST - Cancelar cita médica
 
-2. Post - cancelar cita medica
+`http://localhost:8080/api/citasmedicas/cancelar`
 
-http://localhost:8080/api/citasmedicas/cancelar
-
-Request:
+**Request:**
 
 ```json
 {
@@ -69,17 +67,19 @@ Request:
 }
 ```
 
-Response http 200:
+**Response (HTTP 200):**
 
 ```json
-Cita cancelada con exito
+{
+    "message": "Cita cancelada con éxito"
+}
 ```
 
-3. Get - Consultar citas por medico
+### 3. GET - Consultar citas por médico
 
-http://localhost:8080/api/medico/citasmedicas?id=1
+`http://localhost:8080/api/medico/citasmedicas?id=1`
 
-Response:
+**Response:**
 
 ```json
 {
@@ -155,14 +155,13 @@ Response:
         }
     ]
 }
-
 ```
 
-4. Get - citas medicas futuras pacientes
-http://localhost:8080/api/paciente/citasmedicasfuturas?id=1
+### 4. GET - Citas médicas futuras pacientes
 
+`http://localhost:8080/api/paciente/citasmedicasfuturas?id=1`
 
-Response:
+**Response:**
 
 ```json
 {
