@@ -9,11 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "paciente")
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Paciente {
 
     @Id
@@ -27,7 +35,7 @@ public class Paciente {
     @Column(name = "apellido")
     private String apellido;
 
-    @OneToMany(mappedBy = "medico")
+    @OneToMany(mappedBy = "paciente")
     Set<CitaMedica> citasMedicas;
 
 }
