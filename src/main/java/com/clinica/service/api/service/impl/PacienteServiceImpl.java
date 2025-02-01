@@ -14,7 +14,7 @@ import com.clinica.service.api.request.PacienteRequest;
 import com.clinica.service.api.response.PacienteResponse;
 import com.clinica.service.api.service.PacienteService;
 import com.clinica.service.api.response.CitaMedicaResponse;
-import com.clinica.service.api.response.MedicoResponse;
+import com.clinica.service.api.response.DatosPersonaResponse;
 
 /**
  * Servicio PacienteServiceImpl que implementa los metodos de la interfaz
@@ -98,7 +98,7 @@ public class PacienteServiceImpl implements PacienteService {
                                         .cita(citaMedica.getCita())
                                         .fecha(citaMedica.getFecha())
                                         .estado(citaMedica.getEstado())
-                                        .medico(MedicoResponse.builder()
+                                        .medico(DatosPersonaResponse.builder()
                                                 .id(citaMedica.getMedico().getId())
                                                 .nombre(citaMedica.getMedico().getNombre())
                                                 .apellido(citaMedica.getMedico().getApellido())

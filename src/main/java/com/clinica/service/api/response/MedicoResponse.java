@@ -1,5 +1,7 @@
 package com.clinica.service.api.response;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,4 +14,7 @@ public class MedicoResponse {
     private String nombre;
 
     private String apellido;
+
+    List<CitasMedicoResponse> citasMedicas;
+
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class CitaMedicaResponse {
+public class CitasMedicoResponse {
 
     private Long id;
 
@@ -17,7 +17,8 @@ public class CitaMedicaResponse {
 
     private Timestamp fecha;
 
-    private String estado;    
+    private String estado;
 
-    private DatosPersonaResponse medico;
+    private DatosPersonaResponse paciente;
+
 }

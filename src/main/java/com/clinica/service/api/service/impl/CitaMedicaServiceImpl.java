@@ -1,5 +1,9 @@
 package com.clinica.service.api.service.impl;
 
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +15,12 @@ import com.clinica.service.api.repository.CitaMedicaRepository;
 import com.clinica.service.api.request.CitaMedicaRequest;
 import com.clinica.service.api.request.MedicoRequest;
 import com.clinica.service.api.request.PacienteRequest;
+
 import com.clinica.service.api.service.CitaMedicaService;
 import com.clinica.service.api.service.MedicoService;
 import com.clinica.service.api.service.PacienteService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Servicio CitaMedicaServiceImpl que implementa los metodos de la interfaz
@@ -63,6 +70,8 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
 
                 MedicoRequest medicoRequest = medicoService.validarExistenciaMedico(citaMedicaRequest);
 
+                validarHorayMedico(citaMedicaRequest.getFecha(), medicoRequest.getId());
+
                 citaMedicaRepository.save(CitaMedica.builder()
                                 .cita(citaMedicaRequest.getCita())
                                 .fecha(citaMedicaRequest.getFecha())
@@ -79,6 +88,43 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
                                                 .build())
                                 .build());
 
+        }
+
+        /**
+         * Cancela una cita medica, valida que la cita medica exista y pertenezca al
+         * paciente
+         *
+         * @param id         identificador de la cita medica
+         * @param pacienteId identificador del paciente
+         */
+        @Override
+        public void cancelarCitaMedica(Long id, Long pacienteId) {
+                Optional<CitaMedica> citaMedicaOptional = citaMedicaRepository.findByIdAndPacienteId(id, pacienteId);
+                citaMedicaOptional.ifPresent(citaMedica -> {
+                        citaMedica.setEstado("Cancelada");
+                        citaMedicaRepository.save(citaMedica);
+                });
+
+        }
+
+        /**
+         * Consulta si un medico ya tiene cita medica en una hora igual a la solicitada
+         *
+         * @param fecha fecha de la cita medica
+         * @param id    identificador del medico
+         * @return MedicoResponse Objeto que contiene la informacion del medico y sus
+         *         citas medicas
+         */
+        @Override
+        public CitaMedicaService validarHorayMedico(Timestamp fecha, Long id) {
+
+                List<CitaMedica> byfechaAndMedicoId = citaMedicaRepository.findByfechaAndMedicoId(fecha, id);
+
+                long count = byfechaAndMedicoId.stream().count();
+                if (count > 0) {
+                        throw new IllegalArgumentException("El medico ya tiene una cita en esa fecha y hora");
+                }
+                return this;
         }
 
 }
