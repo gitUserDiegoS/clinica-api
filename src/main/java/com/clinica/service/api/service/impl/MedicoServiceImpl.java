@@ -10,15 +10,36 @@ import com.clinica.service.api.request.CitaMedicaRequest;
 import com.clinica.service.api.request.MedicoRequest;
 import com.clinica.service.api.service.MedicoService;
 
+/**
+ * Servicio MedicoServiceImpl que implementa los metodos de la interfaz
+ * MedicoService
+ *
+ * @see MedicoService.class
+ * @author Diego Sanchez
+ */
 @Service
 public class MedicoServiceImpl implements MedicoService {
 
     private MedicoRepository medicoRepository;
 
+    /**
+     * Constructor para MedicoServiceImpl.
+     * 
+     * @param medicoRepository Repositorio para gestionar data de medicos
+     * 
+     * @see MedicoRepository.class
+     */
     public MedicoServiceImpl(MedicoRepository medicoRepository) {
         this.medicoRepository = medicoRepository;
     }
 
+    /**
+     * Valida la existencia del medico relacionado con la cita medica, sino existe
+     * lo crea y persiste el medico
+     *
+     * @param citaMedicaRequest Objeto que contiene la informacion de la cita medica
+     * @return MedicoRequest Objeto que contiene la informacion del medico
+     */
     @Override
     public MedicoRequest validarExistenciaMedico(CitaMedicaRequest citaMedicaRequest) {
 

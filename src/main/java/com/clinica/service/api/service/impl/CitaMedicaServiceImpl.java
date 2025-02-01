@@ -15,6 +15,12 @@ import com.clinica.service.api.service.CitaMedicaService;
 import com.clinica.service.api.service.MedicoService;
 import com.clinica.service.api.service.PacienteService;
 
+/**
+ * Servicio CitaMedicaServiceImpl que implementa los metodos de la interfaz
+ *
+ * @see CitaMedicaService.class
+ * @author Diego Sanchez
+ */
 @Service
 public class CitaMedicaServiceImpl implements CitaMedicaService {
 
@@ -24,6 +30,16 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
 
         private PacienteService pacienteService;
 
+        /**
+         * Constructor para CitaMedicaServiceImpl.
+         *
+         * @param citaMedicaRepository Repositorio para gestionar citas medicas @see
+         *                             citaMedicaRepository.class
+         * @param medicoService        Servicio para gestionar data de medicos @see
+         *                             MedicoService.class
+         * @param pacienteService      Servicio para gestionar y validar data de
+         *                             pacientes @see PacienteService.class
+         */
         public CitaMedicaServiceImpl(CitaMedicaRepository citaMedicaRepository, MedicoService medicoService,
                         PacienteService pacienteService) {
                 this.citaMedicaRepository = citaMedicaRepository;
@@ -32,6 +48,13 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
 
         }
 
+        /**
+         * Registra citas medicas, valida la existencia del paciente y del medico
+         * relacionado con la cita medica, sino existe lo crea y persiste la cita
+         *
+         * @param citaMedicaRequest Objeto que contiene la informacion de la cita medica
+         * @throws EntityNotFoundException si el paciente o medico no existen
+         */
         @Override
         @Transactional
         public void registrarCitaMedica(CitaMedicaRequest citaMedicaRequest) {
