@@ -1,5 +1,6 @@
 package com.clinica.service.api.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -9,11 +10,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "paciente")
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Paciente {
 
     @Id
@@ -27,7 +36,7 @@ public class Paciente {
     @Column(name = "apellido")
     private String apellido;
 
-    @OneToMany(mappedBy = "medico")
-    Set<CitaMedica> citasMedicas;
+    @OneToMany(mappedBy = "paciente")
+    List<CitaMedica> citasMedicas;
 
 }
