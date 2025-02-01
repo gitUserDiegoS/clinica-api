@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,79 +23,96 @@ import com.clinica.service.api.repository.PacienteRepository;
 import com.clinica.service.api.request.CitaMedicaRequest;
 import com.clinica.service.api.request.MedicoRequest;
 import com.clinica.service.api.request.PacienteRequest;
-
+import com.clinica.service.api.response.PacienteResponse;
 import com.clinica.service.api.service.impl.PacienteServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class PacienteServiceImplTest {
 
-    @Mock
-    private PacienteRepository pacienteRepository;
+        @Mock
+        private PacienteRepository pacienteRepository;
 
-    @InjectMocks
-    private PacienteServiceImpl pacienteServiceImpl;
+        @InjectMocks
+        private PacienteServiceImpl pacienteServiceImpl;
 
-    private CitaMedicaRequest citaMedicaRequest;
+        private CitaMedicaRequest citaMedicaRequest;
 
-    private Paciente paciente;
+        private Paciente paciente;
 
-    private MedicoRequest medicoRequest;
+        private MedicoRequest medicoRequest;
 
-    private PacienteRequest pacienteRequest;
+        private PacienteRequest pacienteRequest;
 
-    @BeforeEach
-    public void setUp() {
+        private Optional<Paciente> datosPaciente;
 
-        medicoRequest = MedicoRequest.builder()
-                .nombre("TestNombreMedico")
-                .apellido("TestApellidoMedico")
-                .build();
+        @BeforeEach
+        public void setUp() {
 
-        pacienteRequest = PacienteRequest.builder()
-                .nombre("TestNombrePaciente")
-                .apellido("TestApellidoPaciente")
-                .build();
+                medicoRequest = MedicoRequest.builder()
+                                .nombre("TestNombreMedico")
+                                .apellido("TestApellidoMedico")
+                                .build();
 
-        citaMedicaRequest = CitaMedicaRequest.builder()
-                .cita("Cita de prueba")
-                .fecha(new Timestamp(System.currentTimeMillis()))
-                .estado("Activa")
-                .medico(medicoRequest)
-                .paciente(pacienteRequest)
-                .build();
+                pacienteRequest = PacienteRequest.builder()
+                                .nombre("TestNombrePaciente")
+                                .apellido("TestApellidoPaciente")
+                                .build();
 
-        paciente = Paciente.builder()
-                .id(1L)
-                .nombre("TestNombrePaciente")
-                .apellido("TestApellidopaciente")
-                .build();
-    }
+                citaMedicaRequest = CitaMedicaRequest.builder()
+                                .cita("Cita de prueba")
+                                .fecha(new Timestamp(System.currentTimeMillis()))
+                                .estado("Activa")
+                                .medico(medicoRequest)
+                                .paciente(pacienteRequest)
+                                .build();
 
-    @Test
-    public void testPacienteExiste() {
-        when(pacienteRepository.findByNombreAndApellido(any(String.class), any(String.class)))
-                .thenReturn(Optional.of(paciente));
+                paciente = Paciente.builder()
+                                .id(1L)
+                                .nombre("TestNombrePaciente")
+                                .apellido("TestApellidopaciente")
+                                .citasMedicas(new ArrayList<>())
+                                .build();
 
-        PacienteRequest resultado = pacienteServiceImpl.validarExistenciaPaciente(citaMedicaRequest);
+                datosPaciente = Optional.of(paciente);
+        }
 
-        assertEquals(1L, resultado.getId());
-        assertEquals("TestNombrePaciente", resultado.getNombre());
-        assertEquals("TestApellidopaciente", resultado.getApellido());
-    }
+        @Test
+        public void testPacienteExiste() {
+                when(pacienteRepository.findByNombreAndApellido(any(String.class), any(String.class)))
+                                .thenReturn(Optional.of(paciente));
 
-    @Test
-    public void testPacienteNoExiste() {
-        when(pacienteRepository.findByNombreAndApellido(anyString(), anyString()))
-                .thenReturn(Optional.empty());
+                PacienteRequest resultado = pacienteServiceImpl.validarExistenciaPaciente(citaMedicaRequest);
 
-        when(pacienteRepository.save(any(Paciente.class)))
-                .thenReturn(paciente);
+                assertEquals(1L, resultado.getId());
+                assertEquals("TestNombrePaciente", resultado.getNombre());
+                assertEquals("TestApellidopaciente", resultado.getApellido());
+        }
 
-        PacienteRequest result = pacienteServiceImpl.validarExistenciaPaciente(citaMedicaRequest);
+        @Test
+        public void testPacienteNoExiste() {
+                when(pacienteRepository.findByNombreAndApellido(anyString(), anyString()))
+                                .thenReturn(Optional.empty());
 
-        assertEquals(1L, result.getId());
-        assertEquals("TestNombrePaciente", result.getNombre());
-        assertEquals("TestApellidopaciente", result.getApellido());
-    }
+                when(pacienteRepository.save(any(Paciente.class)))
+                                .thenReturn(paciente);
+
+                PacienteRequest result = pacienteServiceImpl.validarExistenciaPaciente(citaMedicaRequest);
+
+                assertEquals(1L, result.getId());
+                assertEquals("TestNombrePaciente", result.getNombre());
+                assertEquals("TestApellidopaciente", result.getApellido());
+        }
+
+        @Test
+        public void testObtenerCitasMedicasFutura() {
+                when(pacienteRepository.findById(any(Long.class)))
+                                .thenReturn(Optional.of(paciente)).thenReturn(datosPaciente);
+
+                PacienteResponse result = pacienteServiceImpl.obtenerCitasMedicasFutura(1L);
+
+                assertEquals(1L, result.getId());
+                assertEquals("TestNombrePaciente", result.getNombre());
+                assertEquals("TestApellidopaciente", result.getApellido());
+        }
 
 }

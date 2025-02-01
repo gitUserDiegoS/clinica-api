@@ -1,5 +1,6 @@
 package com.clinica.service.api.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -36,6 +37,6 @@ public class Paciente {
     private String apellido;
 
     @OneToMany(mappedBy = "paciente")
-    Set<CitaMedica> citasMedicas;
+    List<CitaMedica> citasMedicas;
 
 }
