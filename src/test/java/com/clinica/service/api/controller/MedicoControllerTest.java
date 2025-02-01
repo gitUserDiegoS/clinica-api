@@ -16,38 +16,38 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.http.ResponseEntity;
 
-import com.clinica.service.api.response.PacienteResponse;
+import com.clinica.service.api.response.MedicoResponse;
 
-import com.clinica.service.api.service.PacienteService;
+import com.clinica.service.api.service.MedicoService;
 
 @ExtendWith(MockitoExtension.class)
-public class PacienteControllerTest {
+public class MedicoControllerTest {
 
     @Mock
-    private PacienteService pacienteService;
+    private MedicoService medicoService;
 
     @InjectMocks
-    private PacienteController pacienteController;
+    private MedicoController medicoController;
 
-    private PacienteResponse pacienteResponse;
+    private MedicoResponse medicoResponse;
 
     @BeforeEach
     void setUp() {
-        pacienteResponse = PacienteResponse.builder()
+        medicoResponse = MedicoResponse.builder()
                 .id(1L)
-                .nombre("nombrePaciente")
+                .nombre("nombreMedico")
                 .citasMedicas(new ArrayList<>()).build();
 
     }
 
     @Test
-    void testConsultarCitasMedicasFuturas() {
+    void testConsultarCitasMedicas() {
 
-        when(pacienteService.obtenerCitasMedicasFutura(any(long.class))).thenReturn(pacienteResponse);
+        when(medicoService.consultarCitasMedicas(any(long.class))).thenReturn(medicoResponse);
 
-        ResponseEntity<PacienteResponse> response = pacienteController.consultarCitasMedicasFuturas(1L);
+        ResponseEntity<MedicoResponse> response = medicoController.consultarCitasMedicas(1L);
 
-        verify(pacienteService).obtenerCitasMedicasFutura(1L);
+        verify(medicoService).consultarCitasMedicas(1L);
         assertEquals(200, response.getStatusCode().value());
     }
 

@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 
 import com.clinica.service.api.entity.CitaMedica;
-
+import com.clinica.service.api.entity.Medico;
 import com.clinica.service.api.repository.CitaMedicaRepository;
 import com.clinica.service.api.request.CitaMedicaRequest;
 import com.clinica.service.api.request.MedicoRequest;
@@ -42,6 +42,8 @@ public class CitaMedicaServiceImplTest {
     private PacienteRequest pacienteRequest;
     private MedicoRequest medicoRequest;
     private CitaMedica citaMedica;
+    private CitaMedica citaMedicaExecpcion;
+    private Medico medico;
 
     @BeforeEach
     void setUp() {
@@ -68,6 +70,17 @@ public class CitaMedicaServiceImplTest {
 
         citaMedica = CitaMedica.builder().build();
 
+        medico = Medico.builder()
+                .id(1L)
+                .nombre("Sandra")
+                .apellido("Rodriguez")
+                .build();
+
+        citaMedicaExecpcion = CitaMedica.builder()
+                .fecha(Timestamp.valueOf("2023-10-10 00:00:00"))
+                .medico(medico)
+                .build();
+
     }
 
     @Test
@@ -83,4 +96,19 @@ public class CitaMedicaServiceImplTest {
         verify(medicoService).validarExistenciaMedico(citaMedicaRequest);
         verify(citaMedicaRepository).save(any(CitaMedica.class));
     }
+
+    @Test
+    void testRegistrarCitaMedicaExcepcion() {
+        when(pacienteService.validarExistenciaPaciente(any(CitaMedicaRequest.class))).thenReturn(pacienteRequest);
+        when(medicoService.validarExistenciaMedico(any(CitaMedicaRequest.class))).thenReturn(medicoRequest);
+
+        when(citaMedicaRepository.save(any(CitaMedica.class))).thenReturn(citaMedicaExecpcion);
+
+        citaMedicaServiceImpl.registrarCitaMedica(citaMedicaRequest);
+
+        verify(pacienteService).validarExistenciaPaciente(citaMedicaRequest);
+        verify(medicoService).validarExistenciaMedico(citaMedicaRequest);
+        verify(citaMedicaRepository).save(any(CitaMedica.class));
+    }
+
 }

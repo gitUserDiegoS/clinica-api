@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clinica.service.api.request.CancelarCitaRequest;
 import com.clinica.service.api.request.CitaMedicaRequest;
 import com.clinica.service.api.service.CitaMedicaService;
 
@@ -44,5 +45,17 @@ public class CitaMedicaController {
     public ResponseEntity<String> registrarCita(@RequestBody CitaMedicaRequest citaMedicaRequest) {
         citaMedicaService.registrarCitaMedica(citaMedicaRequest);
         return ResponseEntity.created(null).body("Cita registrada con exito");
+    }
+
+    /**
+     * Cancelación de una cita medica.
+     *
+     * @param CancelarCitaRequest citaId y pacienteId a cancelar
+     * @return ResponseEntity con estado http 200 y mensaje de exito
+     */
+    @PostMapping("/citasmedicas/cancelar")
+    public ResponseEntity<String> cancelarCita(@RequestBody CancelarCitaRequest cancelarCitaRequest) {
+        citaMedicaService.cancelarCitaMedica(cancelarCitaRequest.getCitaId(), cancelarCitaRequest.getPacienteId());
+        return ResponseEntity.ok("Cita cancelada con exito");
     }
 }

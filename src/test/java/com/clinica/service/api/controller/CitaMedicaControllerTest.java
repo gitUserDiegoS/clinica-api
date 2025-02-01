@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.http.ResponseEntity;
+
+import com.clinica.service.api.request.CancelarCitaRequest;
 import com.clinica.service.api.request.CitaMedicaRequest;
 import com.clinica.service.api.request.MedicoRequest;
 import com.clinica.service.api.request.PacienteRequest;
@@ -54,4 +56,19 @@ public class CitaMedicaControllerTest {
         assertEquals("Cita registrada con exito", response.getBody());
         assertEquals(201, response.getStatusCode().value());
     }
+
+    @Test
+    void testCancelarCita() {
+        doNothing().when(citaMedicaService).cancelarCitaMedica(1L, 1L);
+
+        ResponseEntity<String> response = citaMedicaController.cancelarCita(CancelarCitaRequest.builder()
+                .citaId(1L)
+                .pacienteId(1L)
+                .build());
+
+        verify(citaMedicaService).cancelarCitaMedica(1L, 1L);
+        assertEquals("Cita cancelada con exito", response.getBody());
+        assertEquals(200, response.getStatusCode().value());
+    }
+
 }
